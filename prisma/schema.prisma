@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
+// Start Models Here
+
+enum Category {
+  prescription
+  otc
+  supplement
+  device
+  cosmetic
+  others
+}
+
+model Medicine {
+  id           String      @id @default(uuid())
+  name         String
+  description  String?
+  category     Category    @default(others)
+  price        Float
+  stock        Int
+  manufacturer String
+  sellerID     String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  orderItems   OrderItem[]
+  reviews      Review[]
+
+  @@index([id])
+  @@map("medicines")
+}
+
+enum Status {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  totalPrice BigInt
+  status     Status
+  userId     String // managed by better auth
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orderItems OrderItem[]
+
+  @@index([userId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  quantity   Int
+  price      Float
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id])
+  medicineId String
+  medicine   Medicine @relation(fields: [medicineId], references: [id])
+
+  @@index([orderId])
+  @@index([medicineId])
+  @@map("orderItems")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+
+  userId String //better will be manage
+
+  medicineId String
+  medicine   Medicine @relation(fields: [medicineId], references: [id])
+
+  @@index([medicineId])
+  @@map("reviews")
+}
