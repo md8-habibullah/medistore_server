@@ -99,10 +99,19 @@ model Review {
   @@map("reviews")
 }
 
+enum Role {
+  CUSTOMER
+  SELLER
+  MANAGER
+  DEVELOPER
+  ADMIN
+}
+
 model User {
   id            String    @id
   name          String
   email         String
+  role          Role      @default(CUSTOMER)
   emailVerified Boolean   @default(false)
   image         String?
   createdAt     DateTime  @default(now())
