@@ -104,7 +104,6 @@ enum Role {
   CUSTOMER
   SELLER
   MANAGER
-  DEVELOPER
   ADMIN
 }
 
