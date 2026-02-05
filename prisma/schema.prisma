@@ -36,6 +36,7 @@ model Medicine {
   id           String      @id @default(uuid())
   name         String
   description  String?
+  tags         String[]    @default([])
   category     Category    @default(others)
   price        Float
   stock        Int

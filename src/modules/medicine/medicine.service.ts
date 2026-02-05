@@ -1,10 +1,105 @@
-import type { Request, Response } from "express";
+import type { MedicineWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../../lib/prisma";
 
-const getAllMedicine = async () => {
-    console.log("View All Medicine");
-    const results = prisma.medicine.findMany()
+const getAllMedicine = async (search: (string), filerTags: string[], isStock: number, sellerID: string, manufacturer: string) => {
+
+    console.log("View All Medicine", search, filerTags, isStock, manufacturer, sellerID);
+
+    // Prisma planner below then query is executed
+
+    const planner: MedicineWhereInput[] = []
+
+    // Search Push for name and description
+    if (search !== undefined && search !== "") {
+        planner.push(
+            {
+                OR: [
+                    {
+                        name: {
+                            contains: search,
+                            mode: "insensitive"
+                        }
+                    },
+                    {
+                        description: {
+                            contains: search,
+                            mode: "insensitive"
+                        }
+                    },
+                ]
+            }
+        )
+    }
+
+    // Tags filter if tags exist  
+    if (filerTags.length > 0) {
+        planner.push(
+            {
+                tags: {
+                    hasEvery: filerTags
+                }
+            }
+        )
+    }
+    // Stock Related planner is Available or not?
+    if (isStock === 1) {
+        planner.push(
+            {
+                stock: {
+                    gt: 0
+                }
+            }
+        )
+    } else if (isStock === 0) {
+        planner.push(
+            {
+                stock: {
+                    lte: 0
+                }
+            }
+        )
+    }
+
+    // Filter by seller ID 
+    if (sellerID != "" && sellerID != undefined) {
+        planner.push(
+            {
+                sellerID: {
+                    equals: sellerID
+                }
+            }
+        )
+    }
+
+    // Filter by manufacturer LTD
+    if (manufacturer != "" && manufacturer != undefined) {
+        planner.push(
+            {
+                manufacturer: {
+                    equals: manufacturer
+                }
+            }
+        )
+    }
+
+
+    console.log(planner);
+    // Finally Prisma Caller 
+    // Finally Prisma Caller 
+    // Finally Prisma Caller 
+
+    const results = await prisma.medicine.findMany({
+        where: {
+            AND: planner
+        }
+    })
     return results;
+
+    // Finally Prisma Caller end
+    // Finally Prisma Caller end
+    // Finally Prisma Caller end
+
+
 }
 
 const createMedicine = async (data: any, sellerID: string) => {
@@ -12,7 +107,7 @@ const createMedicine = async (data: any, sellerID: string) => {
 
     console.log(data);
 
-    const result = prisma.medicine.create({
+    const result = await prisma.medicine.create({
         data,
     })
     return result;
