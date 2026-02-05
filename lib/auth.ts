@@ -9,6 +9,7 @@ export const auth = betterAuth({
         provider: "postgresql",
     }),
     trustedOrigins: [process.env.FRONTEND_APP_URL!, "http://localhost:3000"],
+    baseURL: process.env.BETTER_AUTH_URL,
     user: {
         additionalFields: {
             role: {
@@ -29,12 +30,25 @@ export const auth = betterAuth({
 
     emailVerification: {
         sendOnSignUp: true,
+        autoSignInAfterVerification: true,
         sendVerificationEmail: async ({ user, url, token }, request) => {
+            // Callback URL override
+            url = `${process.env.FRONTEND_APP_URL}/verify-email?token=${token}`;
             sendVerificationEmail(user.email, url, token);
             // console.log(`Send verification email to ${user.email} with url: ${url} and token: ${token}`);
             // to: user.email,
             // subject: "Verify your email address",
             // text: `Click the link to verify your email: ${url}`,
+        },
+    },
+    socialProviders: {
+
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+            accessType: "offline",
+            prompt: "select_account consent",
+
         },
     },
 
