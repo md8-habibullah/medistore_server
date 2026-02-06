@@ -1,9 +1,9 @@
 import type { MedicineWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../../lib/prisma";
 
-const getAllMedicine = async (search: (string), filerTags: string[], isStock: number, sellerID: string, manufacturer: string) => {
+const getAllMedicine = async (search: (string), filerTags: string[], isStock: number, sellerID: string, manufacturer: string, currentPage: number, itemsPerPage: number) => {
 
-    console.log("View All Medicine", search, filerTags, isStock, manufacturer, sellerID);
+    console.log("View All Medicine", search, filerTags, isStock, manufacturer, sellerID, currentPage, itemsPerPage);
 
     // Prisma planner below then query is executed
 
@@ -82,8 +82,8 @@ const getAllMedicine = async (search: (string), filerTags: string[], isStock: nu
         )
     }
 
-
     console.log(planner);
+
     // Finally Prisma Caller 
     // Finally Prisma Caller 
     // Finally Prisma Caller 
@@ -91,7 +91,9 @@ const getAllMedicine = async (search: (string), filerTags: string[], isStock: nu
     const results = await prisma.medicine.findMany({
         where: {
             AND: planner
-        }
+        },
+        skip: currentPage * itemsPerPage,
+        take: itemsPerPage
     })
     return results;
 
