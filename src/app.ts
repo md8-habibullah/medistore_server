@@ -19,7 +19,7 @@ app.all('/api/auth/{*any}', toNodeHandler(auth));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('API is running');
+    res.status(200).send('Alhamdullah. API is running perfectly.By the way, you hit root "/" path.');
 });
 
 app.use("/medicine", medicineRouter);

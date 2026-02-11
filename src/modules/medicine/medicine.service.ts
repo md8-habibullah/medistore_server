@@ -150,11 +150,12 @@ const getMedicineByID = async (id: string) => {
     // console.log(id);
 
     let start = Date.now();
-    const result = await prisma.medicine.findUnique({
+    const result = await prisma.medicine.findUniqueOrThrow({
         where: {
             id
         }
     })
+    console.log(result);
     let end = Date.now();
     return {
         data: result,

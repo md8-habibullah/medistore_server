@@ -1,11 +1,20 @@
 import type { Request, Response } from "express";
 import { orderService } from "./order.service";
 
+// 1. Helper Helper to fix BigInt crash
+const serializeBigInt = (data: any) => {
+    return JSON.parse(JSON.stringify(data, (key, value) =>
+        typeof value === 'bigint'
+            ? value.toString()
+            : value
+    ));
+};
+
 // Create a new order
 const createOrder = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
-        const { items } = req.body; // Expecting { items: [{ medicineId: "xv...", quantity: 2 }] }
+        const { items } = req.body;
 
         if (!userId) {
             return res.status(401).json({ success: false, message: "User not authenticated" });
@@ -17,10 +26,12 @@ const createOrder = async (req: Request, res: Response) => {
 
         const result = await orderService.createOrder(userId, items);
 
+        const serializedResult = serializeBigInt(result);
+
         res.status(201).json({
             success: true,
             message: "Order placed successfully",
-            data: result
+            data: serializedResult
         });
 
     } catch (error: any) {
@@ -43,9 +54,11 @@ const getMyOrders = async (req: Request, res: Response) => {
 
         const result = await orderService.getMyOrders(userId);
 
+        const serializedResult = serializeBigInt(result);
+
         res.status(200).json({
             success: true,
-            data: result
+            data: serializedResult
         });
 
     } catch (error: any) {
@@ -57,21 +70,14 @@ const getMyOrders = async (req: Request, res: Response) => {
     }
 };
 
-// ... existing imports
-
 const getSellerOrders = async (req: Request, res: Response) => {
     try {
         const sellerId = req.user?.id;
         const result = await orderService.getSellerOrders(sellerId!);
 
-        // Fix BigInt serialization issue
-        const jsonResult = JSON.parse(JSON.stringify(result, (key, value) =>
-            typeof value === 'bigint'
-                ? value.toString()
-                : value // return everything else unchanged
-        ));
+        const serializedResult = serializeBigInt(result);
 
-        res.status(200).json({ success: true, data: jsonResult });
+        res.status(200).json({ success: true, data: serializedResult });
     } catch (error: any) {
         res.status(500).json({ success: false, message: error.message });
     }
@@ -80,22 +86,18 @@ const getSellerOrders = async (req: Request, res: Response) => {
 const updateOrderStatus = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { status } = req.body; // Expecting { status: "SHIPPED" }
+        const { status } = req.body;
 
-        const result = await orderService.updateOrderStatus(id as string, status);
+        const result = await orderService.updateOrderStatus(id! as string, status);
 
-        // Fix BigInt serialization
-        const jsonResult = JSON.parse(JSON.stringify(result, (key, value) =>
-            typeof value === 'bigint' ? value.toString() : value
-        ));
+        const serializedResult = serializeBigInt(result);
 
-        res.json({ success: true, message: "Order status updated", data: jsonResult });
+        res.json({ success: true, message: "Order status updated", data: serializedResult });
     } catch (error: any) {
         res.status(500).json({ success: false, message: error.message });
     }
 };
 
-// Update export
 export const orderController = {
     createOrder,
     getMyOrders,
