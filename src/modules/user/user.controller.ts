@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { userService } from "./user.service";
-import { Role } from "../../generated/prisma/enums";
+import { Role } from "../../../generated/prisma/enums";
 
 const getAllUsers = async (req: Request, res: Response) => {
     try {

@@ -1,5 +1,6 @@
-import type { Role } from "../../generated/prisma/enums";
-import { prisma } from "../../lib/prisma";
+import type { Role } from "../../../generated/prisma/enums";
+import { prisma } from "../../../lib/prisma";
+
 
 const getAllUsers = async () => {
     return await prisma.user.findMany({

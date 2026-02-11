@@ -5,7 +5,7 @@ import { medicineRouter } from './modules/medicine/medicine.router';
 import { orderRouter } from './modules/order/order.router';
 import { auth } from '../lib/auth';
 import { reviewRouter } from './modules/review/review.router';
-import { userRouter } from './user/user.router';
+import { userRouter } from './modules/user/user.router';
 
 const app: Application = express();
 
