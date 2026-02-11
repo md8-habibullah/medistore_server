@@ -1,9 +1,10 @@
+import { start } from "node:repl";
 import type { MedicineWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../../lib/prisma";
 
-const getAllMedicine = async (search: (string), filerTags: string[], isStock: number, sellerID: string, manufacturer: string, currentPage: number, itemsPerPage: number) => {
+const getAllMedicine = async (search: (string), filerTags: string[], isStock: number, sellerID: string, manufacturer: string, currentPage: number, itemsPerPage: number, orderby: string) => {
 
-    console.log("View All Medicine", search, filerTags, isStock, manufacturer, sellerID, currentPage, itemsPerPage);
+    console.log("View All Medicine Query : ", search, filerTags, isStock, manufacturer, sellerID, currentPage, itemsPerPage, orderby);
 
     // Prisma planner below then query is executed
 
@@ -87,15 +88,38 @@ const getAllMedicine = async (search: (string), filerTags: string[], isStock: nu
     // Finally Prisma Caller 
     // Finally Prisma Caller 
     // Finally Prisma Caller 
+    let start = Date.now();
 
     const results = await prisma.medicine.findMany({
         where: {
             AND: planner
         },
         skip: currentPage * itemsPerPage,
-        take: itemsPerPage
+        take: itemsPerPage,
+        orderBy: {
+            name: orderby as 'asc' | 'desc',
+        },
     })
-    return results;
+
+
+    const metaPagination = await prisma.medicine.count({
+        where: {
+            AND: planner
+        }
+    });
+
+    let end = Date.now();
+
+    return {
+        data: results,
+        meta: {
+            timeTaken: `${end - start} ms`,
+            totalItem: metaPagination,
+            currentPage: currentPage + 1,
+            itemsPerPage: itemsPerPage,
+            totalPages: Math.ceil(metaPagination / itemsPerPage)
+        }
+    };
 
     // Finally Prisma Caller end
     // Finally Prisma Caller end
@@ -107,16 +131,42 @@ const getAllMedicine = async (search: (string), filerTags: string[], isStock: nu
 const createMedicine = async (data: any, sellerID: string) => {
     data = { ...data, sellerID };
 
-    console.log(data);
-
+    // console.log(data);
+    const start = Date.now();
     const result = await prisma.medicine.create({
         data,
     })
-    return result;
+    const end = Date.now();
+
+    return {
+        data: result,
+        meta: {
+            timeTaken: `${end - start} ms`
+        }
+    };
 };
 
+const getMedicineByID = async (id: string) => {
+    // console.log(id);
+
+    let start = Date.now();
+    const result = await prisma.medicine.findUnique({
+        where: {
+            id
+        }
+    })
+    let end = Date.now();
+    return {
+        data: result,
+        meta: {
+            timeNow: end,
+            timeTaken: `${end - start} ms`
+        }
+    };
+}
 
 export const medicineService = {
     createMedicine,
-    getAllMedicine
+    getAllMedicine,
+    getMedicineByID
 }

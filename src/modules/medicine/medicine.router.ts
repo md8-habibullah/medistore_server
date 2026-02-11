@@ -8,5 +8,6 @@ const router: Router = Router();
 // Define medicine-related routes here
 router.get("/", medicineController.getAllMedicine)
 router.post("/", authVerify(Roles.CUSTOMER, Roles.SELLER), medicineController.createMedicine);
+router.get("/:id", medicineController.getMedicineByID)
 
 export const medicineRouter: Router = router;

@@ -1,11 +1,12 @@
 import type { Request, Response } from "express";
 import { medicineService } from "./medicine.service";
+import { skip } from "node:test";
 
 // Get All Medicine with optional filters: search, tags, stock, sellerID, manufacturer & pagination (skip, take)
 const getAllMedicine = async (req: Request, res: Response) => {
-    let { search, tags, stock, sellerID, manufacturer, page, take } = req.query;
+    let { search, tags, stock, sellerID, manufacturer, page, take, orderBy } = req.query;
 
-    console.log(search, tags, stock, manufacturer, sellerID);
+    console.log(search, tags, stock, manufacturer, sellerID, page, take, orderBy);
 
     // Split tags from comma-separated string to array
     let filterTags = typeof tags === "string" ? tags.split(",") : []
@@ -25,12 +26,24 @@ const getAllMedicine = async (req: Request, res: Response) => {
     }
 
     // Pagination calculation
-    let currentPage = (parseInt(page as string) - 1) || 1
-    let itemsPerPage = parseInt(take as string) || 12
+    let currentPage = 0
+    let itemsPerPage = 9
+    if (parseInt(page as string) < 1 || parseInt(take as string) < 1) {
+        skip
+    } else {
+        currentPage = (parseInt(page as string) - 1) || 0
+        itemsPerPage = parseInt(take as string) || 9
+
+    }
+
+    // Check is orderby is valid or not, if not valid then set default to asc
+    if (orderBy !== "asc" && orderBy !== "desc") {
+        orderBy = "desc"
+    }
 
     // console.log("Query Search is : ", req.query);
     try {
-        const results = await medicineService.getAllMedicine(search as string, filterTags as string[], isStock as number, sellerID as string, manufacturer as string, currentPage, itemsPerPage);
+        const results = await medicineService.getAllMedicine(search as string, filterTags as string[], isStock as number, sellerID as string, manufacturer as string, currentPage, itemsPerPage, orderBy as string);
         res.status(201).json(results);
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error", error });
@@ -50,8 +63,22 @@ const createMedicine = async (req: Request, res: Response) => {
     }
 }
 
+const getMedicineByID = async (req: Request, res: Response) => {
+    console.log(req.headers);
+    try {
+        const id = req.params.id;
+        // debug log
+        // console.log("ID", typeof (id), id);
+        if (!id) return res.status(400).json({ message: "ID is required" });
 
+        const result = await medicineService.getMedicineByID(id as string);
+        res.status(201).json(result);
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error", error });
+    }
+}
 export const medicineController = {
     createMedicine,
-    getAllMedicine
+    getAllMedicine,
+    getMedicineByID
 }
