@@ -66,6 +66,7 @@ model Order {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   orderItems OrderItem[]
+  user       User        @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@map("orders")
@@ -95,6 +96,7 @@ model Review {
 
   medicineId String
   medicine   Medicine @relation(fields: [medicineId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
 
   @@index([medicineId])
   @@map("reviews")
@@ -118,6 +120,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  orders        Order[]
+  reviews       Review[]
 
   @@unique([email])
   @@map("user")

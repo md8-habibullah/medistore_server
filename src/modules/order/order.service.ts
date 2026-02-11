@@ -79,9 +79,14 @@ const getSellerOrders = async (sellerId: string) => {
                 include: {
                     medicine: true
                 }
+            },
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                }
             }
-            // Note: We cannot include 'user' here because your schema.prisma 
-            // does not define a relation between Order and User.
         },
         orderBy: { createdAt: 'desc' }
     });
