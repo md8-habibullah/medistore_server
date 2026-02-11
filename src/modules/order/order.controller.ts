@@ -57,7 +57,48 @@ const getMyOrders = async (req: Request, res: Response) => {
     }
 };
 
+// ... existing imports
+
+const getSellerOrders = async (req: Request, res: Response) => {
+    try {
+        const sellerId = req.user?.id;
+        const result = await orderService.getSellerOrders(sellerId!);
+
+        // Fix BigInt serialization issue
+        const jsonResult = JSON.parse(JSON.stringify(result, (key, value) =>
+            typeof value === 'bigint'
+                ? value.toString()
+                : value // return everything else unchanged
+        ));
+
+        res.status(200).json({ success: true, data: jsonResult });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+const updateOrderStatus = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body; // Expecting { status: "SHIPPED" }
+
+        const result = await orderService.updateOrderStatus(id as string, status);
+
+        // Fix BigInt serialization
+        const jsonResult = JSON.parse(JSON.stringify(result, (key, value) =>
+            typeof value === 'bigint' ? value.toString() : value
+        ));
+
+        res.json({ success: true, message: "Order status updated", data: jsonResult });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// Update export
 export const orderController = {
     createOrder,
-    getMyOrders
+    getMyOrders,
+    getSellerOrders,
+    updateOrderStatus
 };

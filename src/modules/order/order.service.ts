@@ -1,12 +1,14 @@
 import { prisma } from "../../../lib/prisma";
+import { Status } from "../../../generated/prisma/client"; // Import Status Enum
 
+// 1. Create Order (Customer)
 const createOrder = async (userId: string, items: { medicineId: string; quantity: number }[]) => {
 
     // Start a transaction (All or Nothing)
     return await prisma.$transaction(async (tx) => {
         let totalPrice = 0;
 
-        // 1. Calculate price and check stock for EACH item
+        // A. Calculate price and check stock for EACH item
         for (const item of items) {
             const medicine = await tx.medicine.findUnique({
                 where: { id: item.medicineId }
@@ -19,19 +21,19 @@ const createOrder = async (userId: string, items: { medicineId: string; quantity
 
             totalPrice += medicine.price * item.quantity;
 
-            // 2. Reduce Stock immediately
+            // B. Reduce Stock immediately
             await tx.medicine.update({
                 where: { id: item.medicineId },
                 data: { stock: medicine.stock - item.quantity }
             });
         }
 
-        // 3. Create the Order
+        // C. Create the Order
         const newOrder = await tx.order.create({
             data: {
                 userId: userId,
                 totalPrice: BigInt(totalPrice), // Schema uses BigInt
-                status: "PENDING",
+                status: "PENDING", // Default status
                 orderItems: {
                     create: items.map(item => ({
                         medicineId: item.medicineId,
@@ -47,12 +49,55 @@ const createOrder = async (userId: string, items: { medicineId: string; quantity
     });
 };
 
+// 2. Get My Orders (Customer history)
 const getMyOrders = async (userId: string) => {
     return await prisma.order.findMany({
         where: { userId },
-        include: { orderItems: { include: { medicine: true } } }, // Show medicine details in history
+        include: {
+            orderItems: {
+                include: { medicine: true }
+            }
+        },
         orderBy: { createdAt: 'desc' }
     });
 };
 
-export const orderService = { createOrder, getMyOrders };
+// 3. Get Seller Orders (Seller Dashboard)
+const getSellerOrders = async (sellerId: string) => {
+    return await prisma.order.findMany({
+        where: {
+            orderItems: {
+                some: {
+                    medicine: {
+                        sellerID: sellerId
+                    }
+                }
+            }
+        },
+        include: {
+            orderItems: {
+                include: {
+                    medicine: true
+                }
+            }
+            // Note: We cannot include 'user' here because your schema.prisma 
+            // does not define a relation between Order and User.
+        },
+        orderBy: { createdAt: 'desc' }
+    });
+};
+
+// 4. Update Order Status (Seller/Admin)
+const updateOrderStatus = async (orderId: string, status: Status) => {
+    return await prisma.order.update({
+        where: { id: orderId },
+        data: { status }
+    });
+};
+
+export const orderService = {
+    createOrder,
+    getMyOrders,
+    getSellerOrders,
+    updateOrderStatus
+};
