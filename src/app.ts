@@ -2,6 +2,7 @@ import express, { type Application } from 'express';
 import cors from 'cors';
 import { toNodeHandler } from "better-auth/node";
 import { medicineRouter } from './modules/medicine/medicine.router';
+import { orderRouter } from './modules/order/order.router';
 import { auth } from '../lib/auth';
 
 const app: Application = express();
@@ -20,6 +21,8 @@ app.get('/', (req, res) => {
 });
 
 app.use("/medicine", medicineRouter);
+app.use("/orders", orderRouter);
+
 
 
 
