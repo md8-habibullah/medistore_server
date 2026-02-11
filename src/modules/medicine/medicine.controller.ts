@@ -77,8 +77,41 @@ const getMedicineByID = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Internal Server Error", error });
     }
 }
+
+const updateMedicine = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const result = await medicineService.updateMedicine(id as string, req.body, req.user!.id);
+        res.json({
+            success: true, data: result
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false, message: error.message
+        });
+    }
+};
+
+const deleteMedicine = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        await medicineService.deleteMedicine(id as string, req.user!.id);
+        res.json({
+            success: true, message: "Medicine deleted successfully"
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false, message: error.message
+        });
+    }
+};
+
+// Don't forget to export these!
+
 export const medicineController = {
     createMedicine,
     getAllMedicine,
-    getMedicineByID
+    getMedicineByID,
+    updateMedicine,
+    deleteMedicine
 }

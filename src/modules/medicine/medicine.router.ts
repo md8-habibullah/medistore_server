@@ -10,4 +10,8 @@ router.get("/", medicineController.getAllMedicine)
 router.post("/", authVerify(Roles.CUSTOMER, Roles.SELLER), medicineController.createMedicine);
 router.get("/:id", medicineController.getMedicineByID)
 
+// Update & delete
+router.patch("/:id", authVerify(Roles.SELLER, Roles.ADMIN), medicineController.updateMedicine);
+router.delete("/:id", authVerify(Roles.SELLER, Roles.ADMIN), medicineController.deleteMedicine);
+
 export const medicineRouter: Router = router;
