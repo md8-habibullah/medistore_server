@@ -4,6 +4,8 @@ import { toNodeHandler } from "better-auth/node";
 import { medicineRouter } from './modules/medicine/medicine.router';
 import { orderRouter } from './modules/order/order.router';
 import { auth } from '../lib/auth';
+import { reviewRouter } from './modules/review/review.router';
+import { userRouter } from './user/user.router';
 
 const app: Application = express();
 
@@ -24,6 +26,8 @@ app.use("/medicine", medicineRouter);
 app.use("/orders", orderRouter);
 
 
+app.use("/reviews", reviewRouter);
+app.use("/users", userRouter);
 
 
 export default app;
