@@ -7,5 +7,6 @@ const router = Router();
 // Only Admin can see users and change roles
 router.get("/", authVerify(Roles.ADMIN), userController.getAllUsers);
 router.patch("/:id/role", authVerify(Roles.ADMIN), userController.updateUserRole);
+router.patch("/:id/role", authVerify(Roles.ADMIN), userController.updateMyProfile);
 
 export const userRouter: Router = router;

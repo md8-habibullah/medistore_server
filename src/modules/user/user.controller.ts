@@ -28,4 +28,17 @@ const updateUserRole = async (req: Request, res: Response) => {
     }
 };
 
-export const userController = { getAllUsers, updateUserRole };
+// allowing to update in profile
+const updateMyProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user?.id;
+        const { name, image } = req.body;
+
+        const result = await userService.updateUserProfile(userId!, { name, image });
+        res.json({ success: true, data: result });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+export const userController = { getAllUsers, updateUserRole, updateMyProfile };

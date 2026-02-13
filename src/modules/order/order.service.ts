@@ -62,31 +62,28 @@ const getMyOrders = async (userId: string) => {
     });
 };
 
-// 3. Get Seller Orders (Seller Dashboard)
-const getSellerOrders = async (sellerId: string) => {
+// Change signature to accept role
+const getSellerOrders = async (userId: string, role: string) => {
+
+    // If Admin, return ALL orders in the system
+    if (role === "ADMIN") {
+        return await prisma.order.findMany({
+            include: {
+                orderItems: { include: { medicine: true } },
+                user: { select: { id: true, name: true, email: true } }
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+    }
+
+    // If Seller, keep existing logic
     return await prisma.order.findMany({
         where: {
-            orderItems: {
-                some: {
-                    medicine: {
-                        sellerID: sellerId
-                    }
-                }
-            }
+            orderItems: { some: { medicine: { sellerID: userId } } }
         },
         include: {
-            orderItems: {
-                include: {
-                    medicine: true
-                }
-            },
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                }
-            }
+            orderItems: { include: { medicine: true } },
+            user: { select: { id: true, name: true, email: true } }
         },
         orderBy: { createdAt: 'desc' }
     });

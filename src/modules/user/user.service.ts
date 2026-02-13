@@ -11,7 +11,14 @@ const getAllUsers = async () => {
     });
 };
 
-const updateUserRole = async (userId: string, role: Role) => {
+const updateUserProfile = async (userId: string, data: { name?: string, image?: string }) => {
+    return await prisma.user.update({
+        where: { id: userId },
+        data
+    });
+};
+
+const updateUserRole = async (userId: string, role: Role, email?: string, phone?: string) => {
     return await prisma.user.update({
         where: { id: userId },
         data: { role }
@@ -19,5 +26,5 @@ const updateUserRole = async (userId: string, role: Role) => {
 };
 
 export const userService = {
-    getAllUsers, updateUserRole
+    getAllUsers, updateUserRole, updateUserProfile
 };
