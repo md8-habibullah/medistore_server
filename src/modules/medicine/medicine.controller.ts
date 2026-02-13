@@ -4,7 +4,7 @@ import { skip } from "node:test";
 
 // Get All Medicine with optional filters: search, tags, stock, sellerID, manufacturer & pagination (skip, take)
 const getAllMedicine = async (req: Request, res: Response) => {
-    let { search, tags, stock, sellerID, manufacturer, page, take, orderBy } = req.query;
+    let { search, tags, stock, sellerID, manufacturer, page, take, orderBy, category } = req.query;
 
     console.log(search, tags, stock, manufacturer, sellerID, page, take, orderBy);
 
@@ -43,7 +43,7 @@ const getAllMedicine = async (req: Request, res: Response) => {
 
     // console.log("Query Search is : ", req.query);
     try {
-        const results = await medicineService.getAllMedicine(search as string, filterTags as string[], isStock as number, sellerID as string, manufacturer as string, currentPage, itemsPerPage, orderBy as string);
+        const results = await medicineService.getAllMedicine(search as string, filterTags as string[], isStock as number, sellerID as string, manufacturer as string, currentPage, itemsPerPage, orderBy as string, category as string);
         res.status(201).json(results);
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error", error });
@@ -95,7 +95,7 @@ const updateMedicine = async (req: Request, res: Response) => {
 const deleteMedicine = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        await medicineService.deleteMedicine(id as string, req.user!.id);
+        await medicineService.deleteMedicine(id as string, req.user!.id, req.user!.roles);
         res.json({
             success: true, message: "Medicine deleted successfully"
         });

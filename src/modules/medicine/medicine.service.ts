@@ -2,13 +2,20 @@ import { start } from "node:repl";
 import type { MedicineWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../../lib/prisma";
 
-const getAllMedicine = async (search: (string), filerTags: string[], isStock: number, sellerID: string, manufacturer: string, currentPage: number, itemsPerPage: number, orderby: string) => {
+const getAllMedicine = async (search: (string), filerTags: string[], isStock: number, sellerID: string, manufacturer: string, currentPage: number, itemsPerPage: number, orderby: string, category: string) => {
 
     console.log("View All Medicine Query : ", search, filerTags, isStock, manufacturer, sellerID, currentPage, itemsPerPage, orderby);
 
     // Prisma planner below then query is executed
 
     const planner: MedicineWhereInput[] = []
+
+    // Category based 
+    if (category) {
+        planner.push({
+            category: { equals: category as any }
+        });
+    }
 
     // Search Push for name and description
     if (search !== undefined && search !== "") {
@@ -187,12 +194,13 @@ const updateMedicine = async (id: string, data: any, sellerId: string) => {
 };
 
 // Delete Medicine
-const deleteMedicine = async (id: string, sellerId: string) => {
+const deleteMedicine = async (id: string, userID: string, userRole: string) => {
     const medicine = await prisma.medicine.findUnique({ where: { id } });
 
     if (!medicine) throw new Error("Medicine not found");
-    if (medicine.sellerID !== sellerId) throw new Error("Unauthorized to delete this medicine");
-
+    if (medicine.sellerID !== userID && userRole !== 'ADMIN') {
+        throw new Error("Unauthorized");
+    }
     const result = await prisma.medicine.delete({
         where: { id }
     });
