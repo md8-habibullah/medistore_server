@@ -73,7 +73,7 @@ const getMyOrders = async (req: Request, res: Response) => {
 const getSellerOrders = async (req: Request, res: Response) => {
     try {
         const sellerId = req.user?.id;
-        const result = await orderService.getSellerOrders(sellerId!);
+        const result = await orderService.getSellerOrders(sellerId!, req.user?.roles || "CUSTOMER");
 
         const serializedResult = serializeBigInt(result);
 
@@ -92,9 +92,13 @@ const updateOrderStatus = async (req: Request, res: Response) => {
 
         const serializedResult = serializeBigInt(result);
 
-        res.json({ success: true, message: "Order status updated", data: serializedResult });
+        res.json({
+            success: true, message: "Order status updated", data: serializedResult
+        });
     } catch (error: any) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({
+            success: false, message: error.message
+        });
     }
 };
 

@@ -29,11 +29,11 @@ const authVerify = (...roles: Roles[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
 
-            const session = await betterAuth.api.getSession({ // BetterAuth === auth library
+            const session = await betterAuth.api.getSession({ // BetterAuth = auth library
                 headers: req.headers as any
             })
 
-            // console.log(session);// For Debugging
+            // console.log(session); // For Debugging
 
             if (!session) {
                 return res.status(401).json(

@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { userService } from "./user.service";
-import { Role } from "../../../generated/prisma/enums";
+import { Roles } from "../../middlewire/authVerify";
+// import { Role } from "../../../generated/prisma/enums";
 
 const getAllUsers = async (req: Request, res: Response) => {
     try {
@@ -17,7 +18,7 @@ const updateUserRole = async (req: Request, res: Response) => {
         const { role } = req.body; // Expecting { role: "SELLER" } or "ADMIN"
 
         // Validate Role
-        if (!Object.values(Role).includes(role)) {
+        if (!Object.values(Roles).includes(role)) {
             return res.status(400).json({ success: false, message: "Invalid role" });
         }
 

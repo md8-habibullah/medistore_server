@@ -1,11 +1,11 @@
 import { prisma } from "../../../lib/prisma";
-import { Status } from "../../../generated/prisma/client"; // Import Status Enum
+// import { Status } from "../../../generated/prisma/client"; // Import Status Enum
 
 // 1. Create Order (Customer)
 const createOrder = async (userId: string, items: { medicineId: string; quantity: number }[]) => {
 
     // Start a transaction (All or Nothing)
-    return await prisma.$transaction(async (tx) => {
+    return await prisma.$transaction(async (tx: any) => {
         let totalPrice = 0;
 
         // A. Calculate price and check stock for EACH item
@@ -15,6 +15,7 @@ const createOrder = async (userId: string, items: { medicineId: string; quantity
             });
 
             if (!medicine) throw new Error(`Medicine ${item.medicineId} not found`);
+
             if (medicine.stock < item.quantity) {
                 throw new Error(`Insufficient stock for ${medicine.name}`);
             }
@@ -89,11 +90,22 @@ const getSellerOrders = async (userId: string, role: string) => {
     });
 };
 
+enum Status {
+    PENDING = 'PENDING',
+    SHIPPED = 'SHIPPED',
+    DELIVERED = 'DELIVERED',
+    CANCELLED = 'CANCELLED'
+}
+
 // 4. Update Order Status (Seller/Admin)
 const updateOrderStatus = async (orderId: string, status: Status) => {
     return await prisma.order.update({
-        where: { id: orderId },
-        data: { status }
+        where: {
+            id: orderId
+        },
+        data: {
+            status
+        }
     });
 };
 
