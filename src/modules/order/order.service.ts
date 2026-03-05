@@ -7,8 +7,9 @@ const createOrder = async (userId: string, items: { medicineId: string; quantity
     // Start a transaction (All or Nothing)
     return await prisma.$transaction(async (tx: any) => {
         let totalPrice = 0;
+        let orderItemsData = [];
 
-        // A. Calculate price and check stock for EACH item
+        // Calculate price and check stock for EACH item
         for (const item of items) {
             const medicine = await tx.medicine.findUnique({
                 where: { id: item.medicineId }
@@ -22,28 +23,38 @@ const createOrder = async (userId: string, items: { medicineId: string; quantity
 
             totalPrice += medicine.price * item.quantity;
 
-            // B. Reduce Stock immediately
+            // Reduce Stock immediately
             await tx.medicine.update({
-                where: { id: item.medicineId },
-                data: { stock: medicine.stock - item.quantity }
+                where: {
+                    id: medicine.id
+                },
+                data: {
+                    stock: medicine.stock - item.quantity
+                }
             });
+            medicine.quantity = item.quantity; // Add quantity to medicine object for order item creation
+            orderItemsData.push(medicine);
         }
-
-        // C. Create the Order
+        // console.log("ORDER ITEM", orderItemsData);
+        // Create the Order
         const newOrder = await tx.order.create({
             data: {
                 userId: userId,
-                totalPrice: BigInt(totalPrice), // Schema uses BigInt
+                // totalPrice: BigInt(totalPrice), // Schema uses BigInt
+                totalPrice: Math.floor(totalPrice), // Convert to integer (cents) to avoid floating point issues
                 status: "PENDING", // Default status
                 orderItems: {
-                    create: items.map(item => ({
-                        medicineId: item.medicineId,
+                    create: orderItemsData.map(item => ({
+                        medicineId: item.id,
                         quantity: item.quantity,
-                        price: 0 // Ideally fetch current price again or pass it down
+                        // price fetch and show here for better order history details, but not stored in DB
+                        price: item.price
                     }))
                 }
             },
-            include: { orderItems: true } // Return the items with the order
+            include: {
+                orderItems: true
+            } // Return the items with the order
         });
 
         return newOrder;
@@ -53,13 +64,17 @@ const createOrder = async (userId: string, items: { medicineId: string; quantity
 // 2. Get My Orders (Customer history)
 const getMyOrders = async (userId: string) => {
     return await prisma.order.findMany({
-        where: { userId },
+        where: {
+            userId: userId
+        },
         include: {
             orderItems: {
                 include: { medicine: true }
             }
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: {
+            createdAt: 'desc'
+        }
     });
 };
 
@@ -70,10 +85,22 @@ const getSellerOrders = async (userId: string, role: string) => {
     if (role === "ADMIN") {
         return await prisma.order.findMany({
             include: {
-                orderItems: { include: { medicine: true } },
-                user: { select: { id: true, name: true, email: true } }
+                orderItems: {
+                    include: {
+                        medicine: true
+                    }
+                },
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true
+                    }
+                }
             },
-            orderBy: { createdAt: 'desc' }
+            orderBy: {
+                createdAt: 'desc'
+            }
         });
     }
 
@@ -104,7 +131,7 @@ const updateOrderStatus = async (orderId: string, status: Status) => {
             id: orderId
         },
         data: {
-            status
+            status: status
         }
     });
 };

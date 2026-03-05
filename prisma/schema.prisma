@@ -69,7 +69,7 @@ model Order {
   id         String   @id @default(uuid())
   totalPrice BigInt
   status     Status
-  userId     String // managed by better auth
+  userId     String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 

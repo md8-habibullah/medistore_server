@@ -24,17 +24,24 @@ const createOrder = async (req: Request, res: Response) => {
             });
         }
 
-        if (!items || !Array.isArray(items) || items.length === 0) {
-            return res.status(400).json({ success: false, message: "Order must contain at least one item" });
+        if (!items || !Array.isArray(items) || items.length == 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Order must contain at least one item",
+                devMessage: "The 'items' field is required and must be a non-empty array. Ensure that the client is sending the correct payload."
+            });
         }
-
+        // Important Line here - Call the service layer to create the order
         const result = await orderService.createOrder(userId, items);
+
+        console.log("RESULT FROM ME", result);
 
         const serializedResult = serializeBigInt(result);
 
         res.status(201).json({
             success: true,
             message: "Order placed successfully",
+            devMessage: "Order created successfully for user: " + userId,
             data: serializedResult
         });
 
@@ -42,7 +49,7 @@ const createOrder = async (req: Request, res: Response) => {
         console.error("Create Order Error:", error);
         res.status(500).json({
             success: false,
-            message: error.message || "Failed to place order"
+            message: error.message || "Failed to place order",
         });
     }
 };
@@ -53,23 +60,31 @@ const getMyOrders = async (req: Request, res: Response) => {
         const userId = req.user?.id;
 
         if (!userId) {
-            return res.status(401).json({ success: false, message: "User not authenticated" });
+            return res.status(401).json({
+                success: false,
+                message: "User not authenticated",
+                devMessage: "User ID is missing in the request. Ensure that the authentication middleware is properly setting req.user."
+            });
         }
 
         const result = await orderService.getMyOrders(userId);
 
-        const serializedResult = serializeBigInt(result);
+        // const serializedResult = serializeBigInt(result);
 
         res.status(200).json({
             success: true,
-            data: serializedResult
+            message: "Orders retrieved successfully",
+            devMessage: "Order history retrieved for user: " + userId,
+            // data: serializedResult
+            data: result
         });
 
     } catch (error: any) {
         console.error("Get My Orders Error:", error);
         res.status(500).json({
             success: false,
-            message: "Internal Server Error"
+            message: "Internal Server Error",
+            devMessage: error.message || "Failed to retrieve orders. Ensure that the database connection is healthy and the query is correct."
         });
     }
 };
@@ -81,9 +96,15 @@ const getSellerOrders = async (req: Request, res: Response) => {
 
         const serializedResult = serializeBigInt(result);
 
-        res.status(200).json({ success: true, data: serializedResult });
+        res.status(200).json({
+            success: true,
+            data: serializedResult
+        });
     } catch (error: any) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({
+            success: false, message: error.message || "Failed to retrieve seller orders",
+            devMessage: "Ensure that the user is authenticated and has the correct role. Also check database connectivity and query correctness."
+        });
     }
 };
 
@@ -94,14 +115,20 @@ const updateOrderStatus = async (req: Request, res: Response) => {
 
         const result = await orderService.updateOrderStatus(id! as string, status);
 
-        const serializedResult = serializeBigInt(result);
+        // const serializedResult = serializeBigInt(result);
 
         res.json({
-            success: true, message: "Order status updated", data: serializedResult
+            success: true,
+            message: "Order status updated",
+            devMessage: `Order ${id} status updated to ${status}`,
+            // data: serializedResult
+            data: result
         });
     } catch (error: any) {
         res.status(500).json({
-            success: false, message: error.message
+            success: false,
+            message: error.message,
+            devMessage: "Failed to update order status. Ensure that the order ID is correct and the status value is valid."
         });
     }
 };
