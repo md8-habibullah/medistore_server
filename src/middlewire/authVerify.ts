@@ -20,8 +20,6 @@ declare global {
 enum Roles {
     CUSTOMER = "CUSTOMER",
     SELLER = "SELLER",
-    MANAGER = "MANAGER",
-    DEVELOPER = "DEVELOPER",
     ADMIN = "ADMIN"
 }
 
@@ -29,7 +27,7 @@ const authVerify = (...roles: Roles[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
 
-            const session = await betterAuth.api.getSession({ // BetterAuth = auth library
+            const session = await betterAuth.api.getSession({    //         BetterAuth = auth library
                 headers: req.headers as any
             })
 
@@ -39,7 +37,8 @@ const authVerify = (...roles: Roles[]) => {
                 return res.status(401).json(
                     {
                         success: false,
-                        message: "You are Not Authorized"
+                        message: "You are Not Authorized",
+                        devMessage: "No session found. Please log in to access this resource."
                     }
                 )
             }
@@ -48,7 +47,8 @@ const authVerify = (...roles: Roles[]) => {
                 return res.status(403).json(
                     {
                         success: false,
-                        message: "Please Verify Your Email"
+                        message: "Please Verify Your Email",
+                        devMessage: "Email not verified. Please verify your email to access this resource."
                     }
                 )
             }
@@ -57,7 +57,8 @@ const authVerify = (...roles: Roles[]) => {
                 if (!roles.includes(session.user.role as Roles)) {
                     return res.status(403).json({
                         success: false,
-                        message: "FORBIDDEN: You do not have the required permissions"
+                        message: "FORBIDDEN: You do not have the required permissions",
+                        devMessage: `User role '${session.user.role}' does not have access to this resource. Required roles: ${roles.join("|| ")}.`
                     });
                 }
             }
@@ -66,7 +67,7 @@ const authVerify = (...roles: Roles[]) => {
                 id: session.user.id,
                 name: session.user.name,
                 email: session.user.email,
-                roles: session.user.role || Roles.CUSTOMER,
+                roles: session.user.role as string,
                 emailVerified: session.user.emailVerified
             }
 
@@ -74,7 +75,11 @@ const authVerify = (...roles: Roles[]) => {
         } catch (error) {
             console.error("Authentication Error:", error);
             // next(error);
-            res.status(500).json({ success: false, message: "Internal Server Error" });
+            res.status(500).json({
+                success: false,
+                message: "Internal Server Error",
+                devMessage: "An error occurred while verifying authentication. Please try again later."
+            });
         }
     };
 }

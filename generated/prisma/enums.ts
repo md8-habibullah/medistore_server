@@ -34,7 +34,6 @@ export type Status = (typeof Status)[keyof typeof Status]
 export const Role = {
   CUSTOMER: 'CUSTOMER',
   SELLER: 'SELLER',
-  MANAGER: 'MANAGER',
   ADMIN: 'ADMIN'
 } as const
 
