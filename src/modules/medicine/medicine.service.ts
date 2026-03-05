@@ -136,12 +136,17 @@ const getAllMedicine = async (search: (string), filerTags: string[], isStock: nu
 }
 
 const createMedicine = async (data: any, sellerID: string) => {
-    data = { ...data, sellerID };
+    // i want extract category item from data cause category is different model
+    const { category, ...rest } = data;
 
-    // console.log(data);
     const start = Date.now();
+    console.log(rest);
     const result = await prisma.medicine.create({
-        data,
+        data: {
+            ...rest,
+            sellerID,
+            category: category || "others"
+        }
     })
     const end = Date.now();
 
@@ -181,8 +186,8 @@ const updateMedicine = async (id: string, data: any, sellerId: string) => {
         }
     });
 
-    if (!medicine) throw new Error("Medicine not found");
-    if (medicine.sellerID !== sellerId) throw new Error("Unauthorized to update this medicine");
+    if (!medicine) return "Medicine not found";
+    if (medicine.sellerID !== sellerId) return "Unauthorized to update this medicine";
     //  update 
     const result = await prisma.medicine.update({
         where: {
@@ -197,9 +202,9 @@ const updateMedicine = async (id: string, data: any, sellerId: string) => {
 const deleteMedicine = async (id: string, userID: string, userRole: string) => {
     const medicine = await prisma.medicine.findUnique({ where: { id } });
 
-    if (!medicine) throw new Error("Medicine not found");
+    if (!medicine) return "Medicine not found";
     if (medicine.sellerID !== userID && userRole !== 'ADMIN') {
-        throw new Error("Unauthorized");
+        return "Unauthorized to delete this medicine";
     }
     const result = await prisma.medicine.delete({
         where: { id }

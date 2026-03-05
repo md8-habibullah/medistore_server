@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { orderService } from "./order.service";
 
-// 1. Helper Helper to fix BigInt crash
+// Helper Helper to fix BigInt 
 const serializeBigInt = (data: any) => {
     return JSON.parse(JSON.stringify(data, (key, value) =>
         typeof value === 'bigint'
@@ -17,7 +17,11 @@ const createOrder = async (req: Request, res: Response) => {
         const { items } = req.body;
 
         if (!userId) {
-            return res.status(401).json({ success: false, message: "User not authenticated" });
+            return res.status(401).json({
+                success: false,
+                message: "User not authenticated",
+                devMessage: "User ID is missing in the request. Ensure that the authentication middleware is properly setting req.user."
+            });
         }
 
         if (!items || !Array.isArray(items) || items.length === 0) {

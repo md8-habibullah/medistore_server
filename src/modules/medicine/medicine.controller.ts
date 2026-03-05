@@ -59,7 +59,9 @@ const createMedicine = async (req: Request, res: Response) => {
         const result = await medicineService.createMedicine(medicineData, req.user!.id);
         res.status(201).json(result);
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error for create medicine  ", error });
+        res.status(500).json({
+            message: "Internal Server Error for create medicine  ", error
+        });
     }
 }
 
@@ -83,7 +85,9 @@ const updateMedicine = async (req: Request, res: Response) => {
         const { id } = req.params;
         const result = await medicineService.updateMedicine(id as string, req.body, req.user!.id);
         res.json({
-            success: true, data: result
+            success: true,
+            data: result,
+            message: "Medicine updated successfully"
         });
     } catch (error: any) {
         res.status(400).json({

@@ -9,18 +9,6 @@
 * 🟢 You can import this file directly.
 */
 
-export const Category = {
-  prescription: 'prescription',
-  otc: 'otc',
-  supplement: 'supplement',
-  device: 'device',
-  cosmetic: 'cosmetic',
-  others: 'others'
-} as const
-
-export type Category = (typeof Category)[keyof typeof Category]
-
-
 export const Status = {
   PENDING: 'PENDING',
   SHIPPED: 'SHIPPED',

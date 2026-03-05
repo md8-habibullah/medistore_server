@@ -5,10 +5,10 @@ import { authVerify, Roles } from "../../middlewire/authVerify";
 const router = Router();
 
 // Customer creates an order
-router.post("/", authVerify(Roles.CUSTOMER), orderController.createOrder);
+router.post("/", authVerify(Roles.CUSTOMER, Roles.SELLER, Roles.ADMIN), orderController.createOrder);
 
 // User sees THEIR own orders
-router.get("/my-orders", authVerify(Roles.CUSTOMER, Roles.SELLER), orderController.getMyOrders);
+router.get("/my-orders", authVerify(Roles.CUSTOMER, Roles.SELLER, Roles.ADMIN), orderController.getMyOrders);
 
 // 
 router.get("/seller-orders", authVerify(Roles.SELLER, Roles.ADMIN), orderController.getSellerOrders);

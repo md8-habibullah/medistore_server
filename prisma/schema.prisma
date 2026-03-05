@@ -19,13 +19,22 @@ datasource db {
 
 // Start Models Here
 
-enum Category {
-  prescription
-  otc
-  supplement
-  device
-  cosmetic
-  others
+// enum Category {
+//   prescription
+//   otc
+//   supplement
+//   device
+//   cosmetic
+//   others
+// }
+
+model Category {
+  name String @unique
+
+  medicines Medicine[]
+
+  @@index([name])
+  @@map("categories")
 }
 
 model Medicine {
@@ -33,7 +42,7 @@ model Medicine {
   name         String
   description  String?
   tags         String[]    @default([])
-  category     Category    @default(others)
+  category     String      @default("others")
   price        Float
   stock        Int
   manufacturer String
@@ -42,6 +51,8 @@ model Medicine {
   updatedAt    DateTime    @updatedAt
   orderItems   OrderItem[]
   reviews      Review[]
+
+  categoryRel Category @relation(fields: [category], references: [name])
 
   @@index([id])
   @@map("medicines")

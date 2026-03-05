@@ -7,7 +7,7 @@ const router: Router = Router();
 
 // Define medicine-related routes here
 router.get("/", medicineController.getAllMedicine)
-router.post("/", authVerify(Roles.CUSTOMER, Roles.SELLER), medicineController.createMedicine);
+router.post("/", authVerify(Roles.ADMIN, Roles.SELLER), medicineController.createMedicine);
 router.get("/:id", medicineController.getMedicineByID)
 
 // Update & delete
