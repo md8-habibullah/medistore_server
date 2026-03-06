@@ -63,19 +63,19 @@ const createOrder = async (userId: string, items: { medicineId: string; quantity
 
 // 2. Get My Orders (Customer history)
 const getMyOrders = async (userId: string) => {
-    return await prisma.order.findMany({
+    const data = await prisma.order.findMany({
         where: {
             userId: userId
         },
         include: {
-            orderItems: {
-                include: { medicine: true }
-            }
+            orderItems: true
         },
         orderBy: {
             createdAt: 'desc'
         }
     });
+    console.log("servicedata", data);
+    return data;
 };
 
 // Change signature to accept role

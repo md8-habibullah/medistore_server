@@ -1,14 +1,16 @@
 import type { Request, Response } from "express";
 import { orderService } from "./order.service";
+import e from "express";
+import { JSONStringify } from "json-with-bigint";
 
 // Helper Helper to fix BigInt 
-const serializeBigInt = (data: any) => {
-    return JSON.parse(JSON.stringify(data, (key, value) =>
-        typeof value === 'bigint'
-            ? value.toString()
-            : value
-    ));
-};
+// const serializeBigInt = (data: any) => {
+//     return JSON.parse(JSON.stringify(data, (key, value) =>
+//         typeof value === 'bigint'
+//             ? value.toString()
+//             : value
+//     ));
+// };
 
 // Create a new order
 const createOrder = async (req: Request, res: Response) => {
@@ -36,14 +38,15 @@ const createOrder = async (req: Request, res: Response) => {
 
         console.log("RESULT FROM ME", result);
 
-        const serializedResult = serializeBigInt(result);
+        // const serializedResult = serializeBigInt(result);
 
-        res.status(201).json({
-            success: true,
-            message: "Order placed successfully",
-            devMessage: "Order created successfully for user: " + userId,
-            data: serializedResult
-        });
+        // res.status(201).json({
+        //     success: true,
+        //     message: "Order placed successfully",
+        //     devMessage: "Order created successfully for user: " + userId,
+        //     data: serializedResult
+        // });
+        res.status(201).send(JSONStringify(result));
 
     } catch (error: any) {
         console.error("Create Order Error:", error);
@@ -68,23 +71,26 @@ const getMyOrders = async (req: Request, res: Response) => {
         }
 
         const result = await orderService.getMyOrders(userId);
+        console.log("controller", result);
 
         // const serializedResult = serializeBigInt(result);
 
-        res.status(200).json({
-            success: true,
-            message: "Orders retrieved successfully",
-            devMessage: "Order history retrieved for user: " + userId,
-            // data: serializedResult
-            data: result
-        });
+        // res.status(200).json({
+        //     success: true,
+        //     message: "Orders retrieved successfully",
+        //     devMessage: "Order history retrieved for user: " + userId,
+        //     // data: serializedResult
+        //     data: result
+        // });
+
+        res.status(200).send(JSONStringify(result));
+
 
     } catch (error: any) {
-        console.error("Get My Orders Error:", error);
         res.status(500).json({
             success: false,
-            message: "Internal Server Error",
-            devMessage: error.message || "Failed to retrieve orders. Ensure that the database connection is healthy and the query is correct."
+            message: error.message || "Failed to retrieve orders",
+            devMessage: "Failed to retrieve orders. Ensure that the database connection is healthy and the query is correct."
         });
     }
 };
@@ -94,12 +100,14 @@ const getSellerOrders = async (req: Request, res: Response) => {
         const sellerId = req.user?.id;
         const result = await orderService.getSellerOrders(sellerId!, req.user?.roles || "CUSTOMER");
 
-        const serializedResult = serializeBigInt(result);
+        // const serializedResult = serializeBigInt(result);
 
-        res.status(200).json({
-            success: true,
-            data: serializedResult
-        });
+        // res.status(200).json({
+        //     success: true,
+        //     data: serializedResult
+        // });
+
+        res.status(200).send(JSONStringify(result));
     } catch (error: any) {
         res.status(500).json({
             success: false, message: error.message || "Failed to retrieve seller orders",
@@ -117,13 +125,14 @@ const updateOrderStatus = async (req: Request, res: Response) => {
 
         // const serializedResult = serializeBigInt(result);
 
-        res.json({
-            success: true,
-            message: "Order status updated",
-            devMessage: `Order ${id} status updated to ${status}`,
-            // data: serializedResult
-            data: result
-        });
+        // res.json({
+        //     success: true,
+        //     message: "Order status updated",
+        //     devMessage: `Order ${id} status updated to ${status}`,
+        //     // data: serializedResult
+        //     data: result
+        // });
+        res.status(200).send(JSONStringify(result));
     } catch (error: any) {
         res.status(500).json({
             success: false,
