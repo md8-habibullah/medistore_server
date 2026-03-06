@@ -7,7 +7,10 @@ const addReview = async (req: Request, res: Response) => {
         const { medicineId, rating, comment } = req.body;
 
         const result = await reviewService.addReview(userId!, medicineId, rating, comment);
-        res.status(201).json({ success: true, data: result });
+        res.status(201).json({
+            success: true,
+            data: result
+        });
     } catch (error: any) {
         res.status(400).json({ success: false, message: error.message });
     }

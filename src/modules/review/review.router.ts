@@ -4,7 +4,7 @@ import { authVerify, Roles } from "../../middlewire/authVerify";
 
 const router = Router();
 
-router.post("/", authVerify(Roles.CUSTOMER), reviewController.addReview);
+router.post("/", authVerify(Roles.CUSTOMER, Roles.SELLER, Roles.ADMIN), reviewController.addReview);
 router.get("/:medicineId", reviewController.getMedicineReviews);
 
 export const reviewRouter: Router = router;

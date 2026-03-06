@@ -1,4 +1,5 @@
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../../lib/prisma.js";
+import { Status } from '../../../generated/prisma/enums';
 
 const addReview = async (userId: string, medicineId: string, rating: number, comment: string) => {
     // Check if user actually bought the medicine (Optional but good for marks)
@@ -6,12 +7,20 @@ const addReview = async (userId: string, medicineId: string, rating: number, com
         where: {
             userId,
             status: "DELIVERED", // Only allow if delivered
-            orderItems: { some: { medicineId } }
+            orderItems: {
+                some: {
+                    medicineId
+                }
+            }
         }
     });
 
     if (!hasPurchased) {
-        throw new Error("You can only review medicines you have purchased and received.");
+        return {
+            success: false,
+            message: "You can only review medicines you have purchased and received.",
+            devMessage: "User attempted to review without purchasing/delivered order.",
+        };
     }
 
     return await prisma.review.create({

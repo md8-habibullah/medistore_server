@@ -39,6 +39,7 @@ export type ReviewMinAggregateOutputType = {
   rating: number | null
   comment: string | null
   createdAt: Date | null
+  updatedAt: Date | null
   userId: string | null
   medicineId: string | null
 }
@@ -48,6 +49,7 @@ export type ReviewMaxAggregateOutputType = {
   rating: number | null
   comment: string | null
   createdAt: Date | null
+  updatedAt: Date | null
   userId: string | null
   medicineId: string | null
 }
@@ -57,6 +59,7 @@ export type ReviewCountAggregateOutputType = {
   rating: number
   comment: number
   createdAt: number
+  updatedAt: number
   userId: number
   medicineId: number
   _all: number
@@ -76,6 +79,7 @@ export type ReviewMinAggregateInputType = {
   rating?: true
   comment?: true
   createdAt?: true
+  updatedAt?: true
   userId?: true
   medicineId?: true
 }
@@ -85,6 +89,7 @@ export type ReviewMaxAggregateInputType = {
   rating?: true
   comment?: true
   createdAt?: true
+  updatedAt?: true
   userId?: true
   medicineId?: true
 }
@@ -94,6 +99,7 @@ export type ReviewCountAggregateInputType = {
   rating?: true
   comment?: true
   createdAt?: true
+  updatedAt?: true
   userId?: true
   medicineId?: true
   _all?: true
@@ -190,6 +196,7 @@ export type ReviewGroupByOutputType = {
   rating: number
   comment: string
   createdAt: Date
+  updatedAt: Date
   userId: string
   medicineId: string
   _count: ReviewCountAggregateOutputType | null
@@ -222,6 +229,7 @@ export type ReviewWhereInput = {
   rating?: Prisma.IntFilter<"Review"> | number
   comment?: Prisma.StringFilter<"Review"> | string
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
   userId?: Prisma.StringFilter<"Review"> | string
   medicineId?: Prisma.StringFilter<"Review"> | string
   medicine?: Prisma.XOR<Prisma.MedicineScalarRelationFilter, Prisma.MedicineWhereInput>
@@ -233,6 +241,7 @@ export type ReviewOrderByWithRelationInput = {
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   medicineId?: Prisma.SortOrder
   medicine?: Prisma.MedicineOrderByWithRelationInput
@@ -247,6 +256,7 @@ export type ReviewWhereUniqueInput = Prisma.AtLeast<{
   rating?: Prisma.IntFilter<"Review"> | number
   comment?: Prisma.StringFilter<"Review"> | string
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
   userId?: Prisma.StringFilter<"Review"> | string
   medicineId?: Prisma.StringFilter<"Review"> | string
   medicine?: Prisma.XOR<Prisma.MedicineScalarRelationFilter, Prisma.MedicineWhereInput>
@@ -258,6 +268,7 @@ export type ReviewOrderByWithAggregationInput = {
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   medicineId?: Prisma.SortOrder
   _count?: Prisma.ReviewCountOrderByAggregateInput
@@ -275,6 +286,7 @@ export type ReviewScalarWhereWithAggregatesInput = {
   rating?: Prisma.IntWithAggregatesFilter<"Review"> | number
   comment?: Prisma.StringWithAggregatesFilter<"Review"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
   userId?: Prisma.StringWithAggregatesFilter<"Review"> | string
   medicineId?: Prisma.StringWithAggregatesFilter<"Review"> | string
 }
@@ -284,6 +296,7 @@ export type ReviewCreateInput = {
   rating: number
   comment: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   medicine: Prisma.MedicineCreateNestedOneWithoutReviewsInput
   user: Prisma.UserCreateNestedOneWithoutReviewsInput
 }
@@ -293,6 +306,7 @@ export type ReviewUncheckedCreateInput = {
   rating: number
   comment: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   userId: string
   medicineId: string
 }
@@ -302,6 +316,7 @@ export type ReviewUpdateInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   medicine?: Prisma.MedicineUpdateOneRequiredWithoutReviewsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
 }
@@ -311,6 +326,7 @@ export type ReviewUncheckedUpdateInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   medicineId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -320,6 +336,7 @@ export type ReviewCreateManyInput = {
   rating: number
   comment: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   userId: string
   medicineId: string
 }
@@ -329,6 +346,7 @@ export type ReviewUpdateManyMutationInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReviewUncheckedUpdateManyInput = {
@@ -336,6 +354,7 @@ export type ReviewUncheckedUpdateManyInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   medicineId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -355,6 +374,7 @@ export type ReviewCountOrderByAggregateInput = {
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   medicineId?: Prisma.SortOrder
 }
@@ -368,6 +388,7 @@ export type ReviewMaxOrderByAggregateInput = {
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   medicineId?: Prisma.SortOrder
 }
@@ -377,6 +398,7 @@ export type ReviewMinOrderByAggregateInput = {
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   medicineId?: Prisma.SortOrder
 }
@@ -474,6 +496,7 @@ export type ReviewCreateWithoutMedicineInput = {
   rating: number
   comment: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutReviewsInput
 }
 
@@ -482,6 +505,7 @@ export type ReviewUncheckedCreateWithoutMedicineInput = {
   rating: number
   comment: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   userId: string
 }
 
@@ -519,6 +543,7 @@ export type ReviewScalarWhereInput = {
   rating?: Prisma.IntFilter<"Review"> | number
   comment?: Prisma.StringFilter<"Review"> | string
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
   userId?: Prisma.StringFilter<"Review"> | string
   medicineId?: Prisma.StringFilter<"Review"> | string
 }
@@ -528,6 +553,7 @@ export type ReviewCreateWithoutUserInput = {
   rating: number
   comment: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   medicine: Prisma.MedicineCreateNestedOneWithoutReviewsInput
 }
 
@@ -536,6 +562,7 @@ export type ReviewUncheckedCreateWithoutUserInput = {
   rating: number
   comment: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   medicineId: string
 }
 
@@ -570,6 +597,7 @@ export type ReviewCreateManyMedicineInput = {
   rating: number
   comment: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   userId: string
 }
 
@@ -578,6 +606,7 @@ export type ReviewUpdateWithoutMedicineInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
 }
 
@@ -586,6 +615,7 @@ export type ReviewUncheckedUpdateWithoutMedicineInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -594,6 +624,7 @@ export type ReviewUncheckedUpdateManyWithoutMedicineInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -602,6 +633,7 @@ export type ReviewCreateManyUserInput = {
   rating: number
   comment: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   medicineId: string
 }
 
@@ -610,6 +642,7 @@ export type ReviewUpdateWithoutUserInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   medicine?: Prisma.MedicineUpdateOneRequiredWithoutReviewsNestedInput
 }
 
@@ -618,6 +651,7 @@ export type ReviewUncheckedUpdateWithoutUserInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   medicineId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -626,6 +660,7 @@ export type ReviewUncheckedUpdateManyWithoutUserInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   medicineId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -636,6 +671,7 @@ export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   rating?: boolean
   comment?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   userId?: boolean
   medicineId?: boolean
   medicine?: boolean | Prisma.MedicineDefaultArgs<ExtArgs>
@@ -647,6 +683,7 @@ export type ReviewSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   rating?: boolean
   comment?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   userId?: boolean
   medicineId?: boolean
   medicine?: boolean | Prisma.MedicineDefaultArgs<ExtArgs>
@@ -658,6 +695,7 @@ export type ReviewSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   rating?: boolean
   comment?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   userId?: boolean
   medicineId?: boolean
   medicine?: boolean | Prisma.MedicineDefaultArgs<ExtArgs>
@@ -669,11 +707,12 @@ export type ReviewSelectScalar = {
   rating?: boolean
   comment?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   userId?: boolean
   medicineId?: boolean
 }
 
-export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "rating" | "comment" | "createdAt" | "userId" | "medicineId", ExtArgs["result"]["review"]>
+export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "rating" | "comment" | "createdAt" | "updatedAt" | "userId" | "medicineId", ExtArgs["result"]["review"]>
 export type ReviewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   medicine?: boolean | Prisma.MedicineDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -698,6 +737,7 @@ export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     rating: number
     comment: string
     createdAt: Date
+    updatedAt: Date
     userId: string
     medicineId: string
   }, ExtArgs["result"]["review"]>
@@ -1129,6 +1169,7 @@ export interface ReviewFieldRefs {
   readonly rating: Prisma.FieldRef<"Review", 'Int'>
   readonly comment: Prisma.FieldRef<"Review", 'String'>
   readonly createdAt: Prisma.FieldRef<"Review", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Review", 'DateTime'>
   readonly userId: Prisma.FieldRef<"Review", 'String'>
   readonly medicineId: Prisma.FieldRef<"Review", 'String'>
 }

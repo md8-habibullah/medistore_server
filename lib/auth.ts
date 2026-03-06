@@ -1,9 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
-import { send } from "node:process";
 import { sendVerificationEmail } from "./service/email";
-import { admin } from "better-auth/plugins"
 
 
 export const auth = betterAuth({

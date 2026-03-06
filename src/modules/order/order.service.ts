@@ -1,4 +1,4 @@
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../../lib/prisma.js";
 // import { Status } from "../../../generated/prisma/client"; // Import Status Enum
 
 // 1. Create Order (Customer)

@@ -1,6 +1,6 @@
 import { start } from "node:repl";
 import type { MedicineWhereInput } from "../../../generated/prisma/models";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../../lib/prisma.js";
 
 const getAllMedicine = async (search: (string), filerTags: string[], isStock: number, sellerID: string, manufacturer: string, currentPage: number, itemsPerPage: number, orderby: string, category: string) => {
 
@@ -200,16 +200,21 @@ const updateMedicine = async (id: string, data: any, sellerId: string) => {
 
 // Delete Medicine
 const deleteMedicine = async (id: string, userID: string, userRole: string) => {
-    const medicine = await prisma.medicine.findUnique({ where: { id } });
+    const medicine = await prisma.medicine.findUnique({
+        where: { id }
+    });
 
     if (!medicine) return "Medicine not found";
     if (medicine.sellerID !== userID && userRole !== 'ADMIN') {
         return "Unauthorized to delete this medicine";
     }
-    const result = await prisma.medicine.delete({
-        where: { id }
-    });
-    return result;
+    if (medicine.sellerID === userID || (userRole === 'ADMIN' || userRole === 'SELLER')) {
+        const result = await prisma.medicine.delete({
+            where: { id }
+        });
+        return result;
+    }
+
 };
 
 export const medicineService = {

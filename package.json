@@ -2,10 +2,13 @@
   "name": "mediStore_server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "pnpm tsx watch src/server.ts"
+    "dev": "pnpm tsx watch src/server.ts",
+    "build": "pnpm tsc",
+    "start": "node dist/src/server.js"
   },
   "keywords": [],
   "author": "",
