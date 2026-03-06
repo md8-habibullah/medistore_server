@@ -36,7 +36,7 @@ const createOrder = async (req: Request, res: Response) => {
         // Important Line here - Call the service layer to create the order
         const result = await orderService.createOrder(userId, items);
 
-        console.log("RESULT FROM ME", result);
+        // console.log("RESULT FROM ME", result);
 
         // const serializedResult = serializeBigInt(result);
 
@@ -71,7 +71,7 @@ const getMyOrders = async (req: Request, res: Response) => {
         }
 
         const result = await orderService.getMyOrders(userId);
-        console.log("controller", result);
+        // console.log("controller", result);
 
         // const serializedResult = serializeBigInt(result);
 

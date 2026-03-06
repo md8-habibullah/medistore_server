@@ -6,7 +6,7 @@ import { skip } from "node:test";
 const getAllMedicine = async (req: Request, res: Response) => {
     let { search, tags, stock, sellerID, manufacturer, page, take, orderBy, category } = req.query;
 
-    console.log(search, tags, stock, manufacturer, sellerID, page, take, orderBy);
+    // console.log(search, tags, stock, manufacturer, sellerID, page, take, orderBy);
 
     // Split tags from comma-separated string to array
     let filterTags = typeof tags === "string" ? tags.split(",") : []
@@ -66,7 +66,7 @@ const createMedicine = async (req: Request, res: Response) => {
 }
 
 const getMedicineByID = async (req: Request, res: Response) => {
-    console.log(req.headers);
+    // console.log(req.headers);
     try {
         const id = req.params.id;
         // debug log

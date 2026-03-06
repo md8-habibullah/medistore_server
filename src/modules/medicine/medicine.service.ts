@@ -4,7 +4,7 @@ import { prisma } from "../../../lib/prisma.js";
 
 const getAllMedicine = async (search: (string), filerTags: string[], isStock: number, sellerID: string, manufacturer: string, currentPage: number, itemsPerPage: number, orderby: string, category: string) => {
 
-    console.log("View All Medicine Query : ", search, filerTags, isStock, manufacturer, sellerID, currentPage, itemsPerPage, orderby);
+    // console.log("View All Medicine Query : ", search, filerTags, isStock, manufacturer, sellerID, currentPage, itemsPerPage, orderby);
 
     // Prisma planner below then query is executed
 
@@ -90,7 +90,7 @@ const getAllMedicine = async (search: (string), filerTags: string[], isStock: nu
         )
     }
 
-    console.log(planner);
+    // console.log(planner);
 
     // Finally Prisma Caller 
     // Finally Prisma Caller 
@@ -167,7 +167,7 @@ const getMedicineByID = async (id: string) => {
             id
         }
     })
-    console.log(result);
+    // console.log(result);
     let end = Date.now();
     return {
         data: result,

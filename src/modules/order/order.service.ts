@@ -74,7 +74,7 @@ const getMyOrders = async (userId: string) => {
             createdAt: 'desc'
         }
     });
-    console.log("servicedata", data);
+    // console.log("servicedata", data);
     return data;
 };
 
