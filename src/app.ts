@@ -18,16 +18,16 @@ app.all('/api/auth/{*any}', toNodeHandler(auth));
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
+app.get('/api/v1', (req, res) => {
     res.status(200).send('Alhamdullah. API is running perfectly.By the way, you hit root "/" path.');
 });
 
-app.use("/medicine", medicineRouter);
-app.use("/orders", orderRouter);
+app.use("/api/v1/medicine", medicineRouter);
+app.use("/api/v1/orders", orderRouter);
 
 
-app.use("/reviews", reviewRouter);
-app.use("/users", userRouter);
+app.use("/api/v1/reviews", reviewRouter);
+app.use("/api/v1/users", userRouter);
 
 
 export default app;

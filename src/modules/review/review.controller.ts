@@ -12,7 +12,11 @@ const addReview = async (req: Request, res: Response) => {
             data: result
         });
     } catch (error: any) {
-        res.status(400).json({ success: false, message: error.message });
+        res.status(400).json({
+            success: false,
+            message: error.message,
+            devMessage: "An error occurred while adding the review."
+        });
     }
 };
 
