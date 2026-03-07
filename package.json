@@ -1,15 +1,13 @@
 {
-  "name": "mediStore_server",
+  "name": "medistore_server",
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pnpm tsx watch src/server.ts",
-    "build": "pnpm tsc",
     "start": "pnpm tsx src/server.ts",
-    "seed": "pnpm tsx lib/seed.js"
+    "seed": "node lib/seed.js"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +33,7 @@
     "@types/nodemailer": "^7.0.9",
     "@types/pg": "^8.16.0",
     "prisma": "^7.4.2",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0"
   }
 }
