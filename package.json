@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm tsx watch src/server.ts",
+    "build": "pnpm install && pnpm prisma generate",
     "start": "pnpm tsx src/server.ts",
     "seed": "node lib/seed.js"
   },
@@ -33,7 +34,6 @@
     "@types/nodemailer": "^7.0.9",
     "@types/pg": "^8.16.0",
     "prisma": "^7.4.2",
-    "tsup": "^8.5.1",
     "tsx": "^4.21.0"
   }
 }
