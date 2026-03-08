@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "pnpm prisma generate && pnpm tsup src/server.ts --format esm --clean --minify --outDir dist",
-    "start": "node dist/server.js",
+    "build": "pnpm prisma generate && pnpm tsup src/server.ts --format esm --clean --minify --outDir api",
+    "start": "node api/server.js",
     "seed": "node lib/seed.js"
   },
   "keywords": [],
