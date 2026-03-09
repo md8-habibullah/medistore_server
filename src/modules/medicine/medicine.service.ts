@@ -1,6 +1,6 @@
 import { start } from "node:repl";
 import type { MedicineWhereInput } from "../../../generated/prisma/models";
-import { prisma } from "../../../lib/prisma.js";
+import { prisma } from "../../../lib/prisma";
 
 const getAllMedicine = async (search: (string), filerTags: string[], isStock: number, sellerID: string, manufacturer: string, currentPage: number, itemsPerPage: number, orderby: string, category: string) => {
 

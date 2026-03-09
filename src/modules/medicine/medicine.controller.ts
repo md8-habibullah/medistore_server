@@ -1,6 +1,5 @@
 import type { Request, Response } from "express";
 import { medicineService } from "./medicine.service";
-import { skip } from "node:test";
 
 // Get All Medicine with optional filters: search, tags, stock, sellerID, manufacturer & pagination (skip, take)
 const getAllMedicine = async (req: Request, res: Response) => {
@@ -29,7 +28,7 @@ const getAllMedicine = async (req: Request, res: Response) => {
     let currentPage = 0
     let itemsPerPage = 9
     if (parseInt(page as string) < 1 || parseInt(take as string) < 1) {
-        skip
+        console.log("skip; from medicine Controller . ts");
     } else {
         currentPage = (parseInt(page as string) - 1) || 0
         itemsPerPage = parseInt(take as string) || 9

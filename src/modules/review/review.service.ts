@@ -1,4 +1,4 @@
-import { prisma } from "../../../lib/prisma.js";
+import { prisma } from "../../../lib/prisma";
 import { Status } from '../../../generated/prisma/enums';
 
 const addReview = async (userId: string, medicineId: string, rating: number, comment: string) => {
