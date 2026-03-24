@@ -10,7 +10,6 @@ export const auth = betterAuth({
     }),
     trustedOrigins: [process.env.FRONTEND_APP_URL!, "http://localhost:3000"],
     baseURL: process.env.BETTER_AUTH_URL,
-    basePath: "/api/v1/auth",
     user: {
         additionalFields: {
             role: {
@@ -25,7 +24,7 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
         autoSignIn: false,
-        minPasswordLength: 1,
+        minPasswordLength: 3,
         requireEmailVerification: true,
     },
 

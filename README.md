@@ -88,18 +88,18 @@ pnpm run dev
 
 ```
 
-The server will start running at `http://localhost:5000/api/v1`.
+The server will start running at `http://localhost:5000`.
 
 ## API (Application Programming Interface) Routes
 
-The server exposes the following main HTTP (Hypertext Transfer Protocol) endpoints under the `/api/v1` prefix:
+The server exposes the following main HTTP (Hypertext Transfer Protocol) endpoints under the `` prefix:
 
-- `GET /api/v1` - Root health check endpoint.
+- `GET /` - Root health check endpoint.
 - `ANY /api/auth/*` - Handles all authentication and session creation.
-- `USE /api/v1/medicine` - Medicine inventory, search, and management.
-- `USE /api/v1/orders` - Order placement and status tracking.
-- `USE /api/v1/reviews` - Product ratings and user comments.
-- `USE /api/v1/users` - User profile and account management.
+- `USE /medicine` - Medicine inventory, search, and management.
+- `USE /orders` - Order placement and status tracking.
+- `USE /reviews` - Product ratings and user comments.
+- `USE /users` - User profile and account management.
 
 ## Scripts
 
