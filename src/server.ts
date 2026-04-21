@@ -9,7 +9,7 @@ const main = async () => {
         console.log('Database connected successfully.');
         // if (process.env.NODE_ENV !== 'production') {
         app.listen(port, () => {
-            console.log('Server is running on port :', port);
+            console.log('MediStore Backend is running on port :', port);
         });
         // } else {
         //     console.log('Running in production mode. Server is not started.');

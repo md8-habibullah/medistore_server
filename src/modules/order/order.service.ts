@@ -41,7 +41,7 @@ const createOrder = async (userId: string, items: { medicineId: string; quantity
             data: {
                 userId: userId,
                 // totalPrice: BigInt(totalPrice), // Schema uses BigInt
-                totalPrice: Math.floor(totalPrice), // Convert to integer (cents) to avoid floating point issues
+                totalPrice: BigInt(Math.round(totalPrice * 100)), // Store as cents in BigInt for precision
                 status: "PENDING", // Default status
                 orderItems: {
                     create: orderItemsData.map(item => ({
