@@ -15,7 +15,7 @@ app.use(cors({
     credentials: true,
 }));
 // mount the auth router to handle all authentication-related routes
-app.all('/api/auth/{*any}', toNodeHandler(auth));
+app.all('/api/auth/*', toNodeHandler(auth));
 
 app.use(express.json());
 
