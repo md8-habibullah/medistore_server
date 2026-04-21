@@ -46,7 +46,10 @@ const createOrder = async (req: Request, res: Response) => {
         //     devMessage: "Order created successfully for user: " + userId,
         //     data: serializedResult
         // });
-        res.status(201).send(JSONStringify(result));
+        res.status(201).send(JSONStringify({
+            success: true,
+            data: result
+        }));
 
     } catch (error: any) {
         console.error("Create Order Error:", error);
@@ -83,7 +86,10 @@ const getMyOrders = async (req: Request, res: Response) => {
         //     data: result
         // });
 
-        res.status(200).send(JSONStringify(result));
+        res.status(200).send(JSONStringify({
+            success: true,
+            data: result
+        }));
 
 
     } catch (error: any) {
@@ -107,7 +113,10 @@ const getSellerOrders = async (req: Request, res: Response) => {
         //     data: serializedResult
         // });
 
-        res.status(200).send(JSONStringify(result));
+        res.status(200).send(JSONStringify({
+            success: true,
+            data: result
+        }));
     } catch (error: any) {
         res.status(500).json({
             success: false, message: error.message || "Failed to retrieve seller orders",
@@ -132,7 +141,10 @@ const updateOrderStatus = async (req: Request, res: Response) => {
         //     // data: serializedResult
         //     data: result
         // });
-        res.status(200).send(JSONStringify(result));
+        res.status(200).send(JSONStringify({
+            success: true,
+            data: result
+        }));
     } catch (error: any) {
         res.status(500).json({
             success: false,
